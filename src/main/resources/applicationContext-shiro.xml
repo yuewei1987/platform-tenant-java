@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd"
+       default-lazy-init="true">
+
+    <description>Shiro安全配置</description>
+
+    <!-- Shiro's main business-tier object for web-enabled applications -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="sessionManager" ref="defaultWebSessionManager"/>
+        <property name="realm" ref="shiroDbRealm"/>
+        <!-- rememberMe -->
+        <property name="rememberMeManager" ref="rememberMeManager"/>
+    </bean>
+    <!-- 注入自定义 customShiroSessionDAO 以实现shiro session共享-->
+    <bean id="defaultWebSessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+        <property name="globalSessionTimeout" value="3600000"/>
+        <property name="sessionIdCookie" ref="customSessionIdCookie"/>
+        <property name="sessionIdUrlRewritingEnabled" value="false"/>
+    </bean>
+    <bean id="customSessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <constructor-arg value="${spring.application.name}_jsessionid"/><!-- cookie名称-->
+        <property name="path" value="/"/>
+        <property name="secure"
+                  value="${cookie.secure.enabled:false}"/><!-- 设定session cookie的“Secure” flag.配置true只能https方式访问 -->
+    </bean>
+
+    <bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <constructor-arg value="${spring.application.name}_rememberMe"/>  <!-- cookie名称-->
+        <property name="maxAge" value="-1"/><!-- 值是-1,表示关闭浏览器失效-->
+    </bean>
+    <!-- rememberMe管理器 -->
+    <bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
+        <property name="cipherKey" value="#{T(org.apache.shiro.codec.Base64).decode('4AvVhmFLUs0KTA3Kprsdag==')}"/>
+        <property name="cookie" ref="rememberMeCookie"/>
+    </bean>
+
+    <!-- *****************用户授权信息Cache start******************** -->
+    <!-- AuthorizingRealm：独立session -->
+    <bean id="shiroDbRealm" class="com.cs.platform.framework.realm.MyShiroRealm"></bean>
+    <!-- *****************用户授权信息Cache end******************** -->
+
+    <!-- Shiro Filter -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="/"/>
+        <property name="successUrl" value="/"/>
+        <property name="unauthorizedUrl" value="/open/login/forbidden"/>
+        <property name="filters">
+            <map>
+                <entry key="restApi" value-ref="restAnonymousFilter"/>
+            </map>
+        </property>
+        <property name="filterChainDefinitions">
+            <value>
+                /favicon.ico = anon
+                /logout = logout
+                /error/** = anon
+                /ueditor/** = anon
+                /api/login = anon
+                /api/mobile/login = anon
+                /lib/** = anon
+                /css/** = anon
+                /fonts/** = anon
+                /js/** = anon
+                /img/** = anon
+                /open/** = anon,noSessionCreation
+                /mobile/** = anon,noSessionCreation
+                /api/** = restApi,noSessionCreation
+
+                /** = user
+            </value>
+        </property>
+    </bean>
+
+    <!-- AIP Filter -->
+    <bean id="restAnonymousFilter" class="com.cs.platform.framework.service.security.shiro.RestAnonymousFilter"/>
+
+    <!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
+    <bean class="org.apache.shiro.spring.LifecycleBeanPostProcessor" id="lifecycleBeanPostProcessor"/>
+</beans>
