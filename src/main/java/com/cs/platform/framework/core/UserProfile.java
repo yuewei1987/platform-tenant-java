@@ -38,6 +38,8 @@ public class UserProfile implements Serializable {
 
     private String jsessionid;
 
+    private String tenantId;
+
     public String getUserId() {
         return userId;
     }
@@ -52,6 +54,14 @@ public class UserProfile implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
     }
 
     public String getAvatarUrl() {

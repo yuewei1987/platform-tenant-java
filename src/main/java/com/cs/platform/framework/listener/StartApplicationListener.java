@@ -24,6 +24,7 @@ public class StartApplicationListener implements ApplicationListener<Application
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
         logger.info("开始创建缓存..............................................");
+        userService.reloadCache();
         logger.info("创建缓存成功..............................................");
     }
 }
