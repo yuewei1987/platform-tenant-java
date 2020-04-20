@@ -20,6 +20,7 @@ public class ConsoleUser implements Serializable {
      * FIXME
      */
     private static final long serialVersionUID = 4065015704814193325L;
+
     public static final String TYPE_CONSOLE = "10";
 
     /**
