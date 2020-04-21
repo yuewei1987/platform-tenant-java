@@ -9,6 +9,7 @@ import com.cs.platform.framework.service.MenuService;
 import com.cs.platform.framework.service.UserService;
 import com.cs.platform.framework.util.Encodes;
 import com.cs.platform.framework.util.Passwrods;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
@@ -49,14 +50,15 @@ public class MyShiroRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         UserProfile userProfile = (UserProfile) principals.getPrimaryPrincipal();
         logger.info("doGetAuthorizationInfo = {},{}", userProfile.getUserId(), userProfile.getUserName(), userProfile.getLoginAccount());
-        List<Menu> menus = userProfile.getMenus();
-        if (menus != null) {
-            for (Menu m : menus) {
-                authorizationInfo.addStringPermission(m.getName());
+        if (!StringUtils.equals(ConsoleUser.TYPE_CONSOLE, userProfile.getType())) {
+            List<Menu> menus = userProfile.getMenus();
+            if (menus != null) {
+                for (Menu m : menus) {
+                    authorizationInfo.addStringPermission(m.getName());
+                }
             }
         }
         return authorizationInfo;
@@ -78,11 +80,12 @@ public class MyShiroRealm extends AuthorizingRealm {
                 }
                 byte[] salt = Encodes.decodeHex(password.substring(0, 16));
                 UserProfile userProfile = new UserProfile();
-                userProfile.setUserId(consoleUser.getId().toString());
+                userProfile.setUserId(consoleUser.getId());
                 userProfile.setTenantId(null);// 设置租户id
                 userProfile.setLoginAccount(consoleUser.getAccount());
                 userProfile.setUserName(consoleUser.getName());
                 userProfile.setType(ConsoleUser.TYPE_CONSOLE);
+                userProfile.setMenus(Lists.newArrayList());
                 return new SimpleAuthenticationInfo(userProfile, password.substring(16), ByteSource.Util.bytes(salt), getName());
             } else {
                 return null;
@@ -99,7 +102,7 @@ public class MyShiroRealm extends AuthorizingRealm {
             userProfile.setType(user.getType());
             userProfile.setAvatarUrl(user.getAvatarUrl());
             userProfile.setTenantId(user.getTenant().getTenantId());
-            userProfile.setMenus(menuService.getMenu(user.getUserId()));
+            userProfile.setMenus(menuService.getMenu(user));
 
             String password = user.getPassword();
             byte[] salt = Encodes.decodeHex(password.substring(0, 16));

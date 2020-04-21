@@ -62,6 +62,10 @@ public class UserUtils {
         return prof.getUserId();
     }
 
+    public static String getTenantId() {
+        UserProfile prof = getUserProfile();
+        return prof.getTenantId();
+    }
 
     /**
      * 获取用户Name

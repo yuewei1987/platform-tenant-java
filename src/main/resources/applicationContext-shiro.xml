@@ -78,4 +78,9 @@
 
     <!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
     <bean class="org.apache.shiro.spring.LifecycleBeanPostProcessor" id="lifecycleBeanPostProcessor"/>
+
+    <!-- 执行doGetAuthorizationInfo -->
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
 </beans>

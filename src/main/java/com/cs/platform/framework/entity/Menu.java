@@ -48,6 +48,10 @@ public class Menu extends BaseEntity implements Cloneable {
     /**
      * 构造函数
      */
+    public Menu() {
+        super();
+    }
+
     public Menu(String id) {
         super();
         this.delFlag = "0";

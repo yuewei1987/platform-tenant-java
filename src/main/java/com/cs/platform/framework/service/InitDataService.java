@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.Date;
 
 /**
  * @author
@@ -19,7 +20,7 @@ public class InitDataService {
     /**
      * 默认的实例id
      */
-    public static final String DEFAULT_USER_ID = "00014a7a496bd41d";
+    public static final String DEFAULT_CONSOLE_USER_ID = "00014a7a496bd41d";
     /**
      * logger
      */
@@ -37,17 +38,18 @@ public class InitDataService {
     }
 
     public void initDefalutConsoleUser() {
-        ConsoleUser instance = consoleUserDao.findById(DEFAULT_USER_ID).orElse(null);
+        ConsoleUser instance = consoleUserDao.findById(DEFAULT_CONSOLE_USER_ID).orElse(null);
         if (instance != null) {
             return;
         }
         instance = new ConsoleUser();
-        instance.setId(DEFAULT_USER_ID);
+        instance.setId(DEFAULT_CONSOLE_USER_ID);
         instance.setName("管理员");
-        instance.setAccount("yw-admin");
+        instance.setAccount("admin");
         instance.setPassword("54c820a4c737cd635b83e3e42af94fb4d75405d38d376a15102cc007");
         instance.setPhone("13800000000");
         instance.setGender("0");
+        instance.setLastLoginDate(new Date());
         consoleUserDao.saveAndFlush(instance);
         logger.info("初始化【运维用户】数据：" + instance);
     }

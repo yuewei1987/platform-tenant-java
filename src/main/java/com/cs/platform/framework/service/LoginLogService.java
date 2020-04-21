@@ -35,6 +35,7 @@ public class LoginLogService {
             filters.put("userId", new SearchFilter("userId", SearchFilter.Operator.EQ, UserUtils.getUserId()));
         }
         filters.put("delFlag", new SearchFilter("delFlag", SearchFilter.Operator.EQ, "0"));
+        filters.put("tenant.tenantId", new SearchFilter("tenant.tenantId", SearchFilter.Operator.EQ, UserUtils.getTenantId()));
         Specification<LoginLog> spec = DynamicSpecifications.bySearchFilter(filters.values(), LoginLog.class);
         Page<LoginLog> page = loginLogDao.findAll(spec, pageRequest);
         List<LoginLog> list = page.getContent();

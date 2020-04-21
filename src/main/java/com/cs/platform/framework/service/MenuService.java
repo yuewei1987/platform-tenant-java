@@ -2,6 +2,7 @@ package com.cs.platform.framework.service;
 
 import com.cs.platform.framework.core.UserUtils;
 import com.cs.platform.framework.entity.Menu;
+import com.cs.platform.framework.entity.User;
 import com.cs.platform.framework.repository.MenuDao;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
@@ -32,11 +33,11 @@ public class MenuService {
         return result;
     }
 
-    public List<Menu> getMenu(String userId) {
-        if (StringUtils.equals(userId, InitDataService.DEFAULT_USER_ID)) {
-            return menuDao.findAdminMenu();
+    public List<Menu> getMenu(User user) {
+        if (StringUtils.equals(user.getType(), User.TYPE_INNER_ADMIN)) {
+            return menuDao.findAdminMenu(user.getTenant().getTenantId());
         } else {
-            return menuDao.findMenuByUserId(userId);
+            return menuDao.findMenuByUserId(user.getUserId());
         }
     }
 

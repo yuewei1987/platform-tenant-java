@@ -41,19 +41,30 @@ public class LoginRestController {
         try {
             //写登录日志
             String address = IPUtil.getIPLocation(host);
-            LoginLog log = new LoginLog(UserUtils.getUserId(), host, address);
             String tenantId = "";
             if (StringUtils.isNotEmpty(domainName)) {
                 tenantId = tenantService.findTenantByDomainName(domainName).getTenantId();
-                log.setTenant(new Tenant(tenantId));
             }
             RestUsernamePasswordToken token = new RestUsernamePasswordToken(username, password, host, tenantId);
             subject.login(token);
-            loginLogService.save(log);
+            if (StringUtils.isNotEmpty(domainName)) {
+                LoginLog log = new LoginLog(UserUtils.getUserId(), host, address);
+                log.setTenant(new Tenant(tenantId));
+                log.setUserId(UserUtils.getUserId());
+                loginLogService.save(log);
+            }
             return RestObject.newOk("", UserUtils.getUserProfile());
         } catch (Exception ex) {
             logger.error("登录失败", ex);
         }
         return RestObject.newError("");
+    }
+
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    @ResponseBody
+    public RestObject logout() {
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        return RestObject.newOk("退出成功");
     }
 }
