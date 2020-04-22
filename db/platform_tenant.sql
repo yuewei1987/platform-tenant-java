@@ -1,19 +1,44 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost
-Source Server Version : 80019
-Source Host           : localhost:3306
+Source Server         : local
+Source Server Version : 50712
+Source Host           : 127.0.0.1:3306
 Source Database       : platform_tenant
 
 Target Server Type    : MYSQL
-Target Server Version : 80019
+Target Server Version : 50712
 File Encoding         : 65001
 
-Date: 2020-04-22 15:27:07
+Date: 2020-04-22 20:40:09
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for pub_banner
+-- ----------------------------
+DROP TABLE IF EXISTS `pub_banner`;
+CREATE TABLE `pub_banner` (
+  `id` varchar(40) NOT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `del_flag` varchar(1) NOT NULL DEFAULT '0',
+  `update_date` datetime DEFAULT NULL,
+  `fid` varchar(40) DEFAULT NULL,
+  `href` varchar(200) DEFAULT NULL,
+  `sort_index` int(2) NOT NULL DEFAULT '1',
+  `url` varchar(400) DEFAULT NULL,
+  `tenant_id` varchar(40) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKfiqmo5p3k7cm4cu5xr3cuemme` (`tenant_id`),
+  CONSTRAINT `FKfiqmo5p3k7cm4cu5xr3cuemme` FOREIGN KEY (`tenant_id`) REFERENCES `pub_tenant` (`tenant_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of pub_banner
+-- ----------------------------
+INSERT INTO `pub_banner` VALUES ('000171a1d77c8601', '2020-04-22 20:23:06', '0', '2020-04-22 20:23:06', '', null, '2', '/platform/open/file/view/5d51c7cd-ee79-44bc-8b58-e51f2bf8bc33', '000148446c11ab05');
+INSERT INTO `pub_banner` VALUES ('000171a1d7bc7902', '2020-04-22 20:23:22', '0', '2020-04-22 20:23:22', '', null, '1', '/platform/open/file/view/a9ad5837-d1c5-46a0-a742-8e5a58f702e0', '000148446c11ab05');
 
 -- ----------------------------
 -- Table structure for pub_config
@@ -56,7 +81,7 @@ CREATE TABLE `pub_console_user` (
   `name` varchar(40) NOT NULL,
   `password` varchar(80) NOT NULL,
   `phone` varchar(15) DEFAULT NULL,
-  `sort` int NOT NULL,
+  `sort` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -92,6 +117,11 @@ INSERT INTO `pub_login_log` VALUES ('000171a0b2b53e01', '2020-04-22 15:03:19', '
 INSERT INTO `pub_login_log` VALUES ('000171a0b46fac02', '2020-04-22 15:05:12', '0', '2020-04-22 15:05:12', null, '127.0.0.1', '000148444c11ac09', '000148446c11ab05');
 INSERT INTO `pub_login_log` VALUES ('000171a0b6c60b00', '2020-04-22 15:07:45', '0', '2020-04-22 15:07:45', null, '127.0.0.1', '000171a084777901', '000148446c11ab05');
 INSERT INTO `pub_login_log` VALUES ('000171a0c38b0900', '2020-04-22 15:21:42', '0', '2020-04-22 15:21:42', '本地登录', '127.0.0.1', '000148444c11ac09', '000148446c11ab05');
+INSERT INTO `pub_login_log` VALUES ('000171a1d4560400', '2020-04-22 20:19:40', '0', '2020-04-22 20:19:40', '本地登录', '127.0.0.1', '000148444c11ac09', '000148446c11ab05');
+INSERT INTO `pub_login_log` VALUES ('000171a1d8753f03', '2020-04-22 20:24:10', '0', '2020-04-22 20:24:10', '本地登录', '127.0.0.1', '000148444c11ac00', '000148446c11ac09');
+INSERT INTO `pub_login_log` VALUES ('000171a1d8754e04', '2020-04-22 20:24:10', '0', '2020-04-22 20:24:10', '本地登录', '127.0.0.1', '000148444c11ac09', '000148446c11ab05');
+INSERT INTO `pub_login_log` VALUES ('000171a1dd7f0705', '2020-04-22 20:29:40', '0', '2020-04-22 20:29:40', '本地登录', '127.0.0.1', '000148444c11ac00', '000148446c11ac09');
+INSERT INTO `pub_login_log` VALUES ('000171a1ddf44206', '2020-04-22 20:30:10', '0', '2020-04-22 20:30:10', '本地登录', '127.0.0.1', '000148444c11ac09', '000148446c11ab05');
 
 -- ----------------------------
 -- Table structure for pub_menu
@@ -107,7 +137,7 @@ CREATE TABLE `pub_menu` (
   `icon` varchar(40) DEFAULT NULL,
   `name` varchar(40) DEFAULT NULL,
   `pid` varchar(40) DEFAULT NULL,
-  `sort_index` int NOT NULL DEFAULT '1',
+  `sort_index` int(11) NOT NULL DEFAULT '1',
   `tenant_id` varchar(40) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FK2smqjjqc8jgxu813l6umhg6s0` (`tenant_id`),
@@ -124,6 +154,7 @@ INSERT INTO `pub_menu` VALUES ('11', '2020-01-15 11:58:32', '0', '2020-01-15 11:
 INSERT INTO `pub_menu` VALUES ('110', '2019-09-23 15:50:51', '0', '2019-09-23 15:50:55', '修改密码', '', '', '/userManagePwd/index', '18', '20', '000148446c11ac09');
 INSERT INTO `pub_menu` VALUES ('111', '2020-01-15 11:58:32', '0', '2020-01-15 11:59:36', '账户安全', null, null, '/loginLogManage/index', '18', '15', '000148446c11ac09');
 INSERT INTO `pub_menu` VALUES ('113', '2019-09-23 15:56:13', '1', '2019-09-23 15:56:23', '用户组管理', '', '', '/userGroupManage/index', '15', '30', '000148446c11ac09');
+INSERT INTO `pub_menu` VALUES ('115', '2019-11-04 20:39:13', '0', '2019-11-04 20:39:39', '宝贝管理', null, 'el-icon-s-shop', '15', null, '10', '000148446c11ab05');
 INSERT INTO `pub_menu` VALUES ('119', '2019-09-23 15:56:13', '1', '2019-09-23 15:56:23', '缓存管理', '', '', '/cacheManage/index', '15', '100', '000148446c11ac09');
 INSERT INTO `pub_menu` VALUES ('123', '2019-09-23 15:56:13', '0', '2019-09-23 15:56:23', '用户组管理', '', '', '/userGroupManage/index', '15', '30', '000148446c11ac09');
 INSERT INTO `pub_menu` VALUES ('129', '2019-09-23 15:50:51', '0', '2019-09-23 15:50:55', '账号资料', '', '', '/userManageOwner/index', '18', '10', '000148446c11ac09');
@@ -137,10 +168,14 @@ INSERT INTO `pub_menu` VALUES ('19', '2019-09-23 15:56:13', '1', '2019-09-23 15:
 INSERT INTO `pub_menu` VALUES ('201', '2019-09-23 15:56:13', '0', '2019-09-23 15:56:23', '参数配置', '', '', '/configManage/index', '5', '110', '000148446c11ab05');
 INSERT INTO `pub_menu` VALUES ('221', '2019-09-23 15:56:13', '0', '2019-09-23 15:56:23', '参数配置', '', '', '/configManage/index', '15', '110', '000148446c11ac09');
 INSERT INTO `pub_menu` VALUES ('5', '2019-09-23 15:50:51', '0', '2019-09-23 15:50:55', '系统管理', null, 'el-icon-setting', '5', null, '50', '000148446c11ab05');
+INSERT INTO `pub_menu` VALUES ('56', '2019-11-04 20:41:12', '0', '2019-11-04 20:41:30', '商品管理', null, null, '/productManage/index', '115', '30', '000148446c11ab05');
 INSERT INTO `pub_menu` VALUES ('6', '2019-09-23 15:56:13', '0', '2019-09-23 15:56:23', '用户管理', null, null, '/userManage/index', '5', '20', '000148446c11ab05');
 INSERT INTO `pub_menu` VALUES ('7', '2019-09-23 15:56:13', '1', '2019-09-23 15:56:23', '组织管理', '', '', '/orgManage/index', '5', '60', '000148446c11ab05');
+INSERT INTO `pub_menu` VALUES ('77', '2019-11-04 20:41:49', '0', '2019-11-04 20:41:59', '分类管理', null, null, '/typeManage/index', '115', '20', '000148446c11ab05');
 INSERT INTO `pub_menu` VALUES ('8', '2019-09-23 15:50:51', '0', '2019-09-23 15:50:55', '账号管理', '', 'el-icon-user', '8', null, '60', '000148446c11ab05');
+INSERT INTO `pub_menu` VALUES ('88', '2019-11-04 20:47:03', '0', '2019-11-04 20:47:10', 'Banner管理', null, 'el-icon-postcard', '/bannerManage/index', null, '1', '000148446c11ac09');
 INSERT INTO `pub_menu` VALUES ('9', '2019-09-23 15:50:51', '0', '2019-09-23 15:50:55', '账号资料', '', '', '/userManageOwner/index', '8', '10', '000148446c11ab05');
+INSERT INTO `pub_menu` VALUES ('98', '2019-11-04 20:47:03', '0', '2019-11-04 20:47:10', 'Banner管理', null, 'el-icon-postcard', '/bannerManage/index', null, '1', '000148446c11ab05');
 
 -- ----------------------------
 -- Table structure for pub_tenant
