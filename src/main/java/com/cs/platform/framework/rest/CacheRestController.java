@@ -3,6 +3,7 @@ package com.cs.platform.framework.rest;
 
 import com.cs.platform.framework.core.RestObject;
 import com.cs.platform.framework.core.UserUtils;
+import com.cs.platform.framework.service.BannerService;
 import com.cs.platform.framework.service.MenuService;
 import com.cs.platform.framework.service.UserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -22,28 +23,34 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping(value = "/api/cache")
 @RequiresPermissions("/cacheManage/index")
 public class CacheRestController {
-  private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
-  @Autowired
-  private MenuService menuService;
+    @Autowired
+    private MenuService menuService;
 
-  @Autowired
-  private UserService userService;
+    @Autowired
+    private UserService userService;
 
-  @RequestMapping(value = "/clear/{type}", method = RequestMethod.POST)
-  @ResponseBody
-  public RestObject save(@PathVariable String type) {
-    try {
-      switch (type) {
-        case "menu": {
-          UserUtils.getUserProfile().setMenus(menuService.getMenu(userService.findUserByUserId(UserUtils.getUserId())));
+    @Autowired
+    private BannerService bannerService;
+
+    @RequestMapping(value = "/clear/{type}", method = RequestMethod.POST)
+    @ResponseBody
+    public RestObject save(@PathVariable String type) {
+        try {
+            switch (type) {
+                case "menu": {
+                    UserUtils.getUserProfile().setMenus(menuService.getMenu(userService.findUserByUserId(UserUtils.getUserId())));
+                }
+                case "banner": {
+                    bannerService.reloadCache();
+                }
+            }
+            return RestObject.newOk("清除成功");
+        } catch (Exception e) {
+            logger.error("清除失败", e);
+            return RestObject.newError("清除失败");
         }
-      }
-      return RestObject.newOk("清除成功");
-    } catch (Exception e) {
-      logger.error("清除失败", e);
-      return RestObject.newError("清除失败");
     }
-  }
 
 }
