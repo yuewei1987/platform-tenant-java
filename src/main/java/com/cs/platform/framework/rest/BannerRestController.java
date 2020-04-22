@@ -2,6 +2,7 @@ package com.cs.platform.framework.rest;
 
 
 import com.cs.platform.framework.core.RestObject;
+import com.cs.platform.framework.core.UserUtils;
 import com.cs.platform.framework.entity.Banner;
 import com.cs.platform.framework.service.BannerService;
 import org.apache.commons.lang3.StringUtils;
@@ -81,7 +82,7 @@ public class BannerRestController {
     @ResponseBody
     public RestObject getAllBanner() {
         try {
-            return RestObject.newOk("", bannerService.getAll());
+            return RestObject.newOk("", bannerService.getAll(UserUtils.getTenantId()));
         } catch (Exception e) {
             logger.error("查询banner失败", e);
             return RestObject.newError("查询banner失败");

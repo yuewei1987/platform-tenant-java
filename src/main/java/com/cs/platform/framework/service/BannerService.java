@@ -55,8 +55,8 @@ public class BannerService {
         }
     }
 
-    public List<Banner> getAll() {
-        return BANNER_DATA.get(UserUtils.getTenantId());
+    public List<Banner> getAll(String tenantId) {
+        return BANNER_DATA.get(tenantId);
     }
 
     public Page<Banner> findPage(int pageNumber, int pageSize) {
