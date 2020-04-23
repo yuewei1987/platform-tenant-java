@@ -15,7 +15,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="platform-tenant-java" options="-parameters" />
+      <module name="platform-tenant-java" options="" />
     </option>
   </component>
 </project>
