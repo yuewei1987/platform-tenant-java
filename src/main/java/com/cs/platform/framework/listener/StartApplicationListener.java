@@ -1,5 +1,7 @@
 package com.cs.platform.framework.listener;
 
+import com.cs.platform.app.service.ClassifyService;
+import com.cs.platform.app.service.ProductService;
 import com.cs.platform.framework.service.BannerService;
 import com.cs.platform.framework.service.UserService;
 import com.cs.platform.framework.thread.QueueThread;
@@ -20,20 +22,26 @@ import java.util.concurrent.Executors;
  */
 @Component
 public class StartApplicationListener implements ApplicationListener<ApplicationReadyEvent> {
-  protected Logger logger = LoggerFactory.getLogger(getClass());
+    protected Logger logger = LoggerFactory.getLogger(getClass());
 
-  @Autowired
-  private UserService userService;
-  @Autowired
-  private BannerService bannerService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private BannerService bannerService;
+    @Autowired
+    private ClassifyService classifyService;
+    @Autowired
+    private ProductService productService;
 
-  @Override
-  public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
-    logger.info("开始创建缓存..............................................");
-    userService.reloadCache();
-    bannerService.reloadCache();
-    Executor executor = Executors.newCachedThreadPool();
-    executor.execute(new QueueThread());
-    logger.info("创建缓存成功..............................................");
-  }
+    @Override
+    public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
+        logger.info("开始创建缓存..............................................");
+        userService.reloadCache();
+        bannerService.reloadCache();
+        classifyService.reloadCache();
+        productService.reloadCache();
+        Executor executor = Executors.newCachedThreadPool();
+        executor.execute(new QueueThread());
+        logger.info("创建缓存成功..............................................");
+    }
 }
