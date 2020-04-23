@@ -21,11 +21,8 @@ public class ConfigKeysConstants {
   private ConfigKeysConstants() {
   }
 
-  @ConfigDef(cnName = "号码检测每次上传文件最多个数", showType = "1", cnValue = "50000", Desc = "号码检测每次最多个数", sort = 10)
-  public final static String CHECK_MAX_CEILING = "check_max_ceiling";
-
-  @ConfigDef(cnName = "号码库每次查询的最大个数", showType = "1", cnValue = "600", Desc = "号码库每次查询的最大个数", sort = 10)
-  public final static String MONGODB_MAX_CEILING = "mongodb_max_ceiling";
+  @ConfigDef(cnName = "系统名称", showType = "3", cnValue = "XX平台", Desc = "自定义系统名称", sort = 10)
+  public final static String SYSTEMPROFILES_TITLE = "systemprofiles_title";
 
   /**
    * 配置信息设置
