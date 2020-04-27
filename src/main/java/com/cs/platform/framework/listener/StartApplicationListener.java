@@ -3,6 +3,7 @@ package com.cs.platform.framework.listener;
 import com.cs.platform.app.service.ClassifyService;
 import com.cs.platform.app.service.ProductService;
 import com.cs.platform.framework.service.BannerService;
+import com.cs.platform.framework.service.ConsoleConfigService;
 import com.cs.platform.framework.service.UserService;
 import com.cs.platform.framework.thread.QueueThread;
 import org.slf4j.Logger;
@@ -32,6 +33,8 @@ public class StartApplicationListener implements ApplicationListener<Application
     private ClassifyService classifyService;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private ConsoleConfigService consoleConfigService;
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
@@ -40,6 +43,7 @@ public class StartApplicationListener implements ApplicationListener<Application
         bannerService.reloadCache();
         classifyService.reloadCache();
         productService.reloadCache();
+        consoleConfigService.initConfig();
         Executor executor = Executors.newCachedThreadPool();
         executor.execute(new QueueThread());
         logger.info("创建缓存成功..............................................");

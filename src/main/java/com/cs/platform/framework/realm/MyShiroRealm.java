@@ -3,6 +3,7 @@ package com.cs.platform.framework.realm;
 import com.cs.platform.framework.core.UserProfile;
 import com.cs.platform.framework.entity.ConsoleUser;
 import com.cs.platform.framework.entity.Menu;
+import com.cs.platform.framework.entity.Tenant;
 import com.cs.platform.framework.entity.User;
 import com.cs.platform.framework.service.ConsoleUserService;
 import com.cs.platform.framework.service.MenuService;
@@ -23,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.UUID;
 
 public class MyShiroRealm extends AuthorizingRealm {
     /**
@@ -53,14 +55,14 @@ public class MyShiroRealm extends AuthorizingRealm {
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         UserProfile userProfile = (UserProfile) principals.getPrimaryPrincipal();
         logger.info("doGetAuthorizationInfo = {},{}", userProfile.getUserId(), userProfile.getUserName(), userProfile.getLoginAccount());
-        if (!StringUtils.equals(ConsoleUser.TYPE_CONSOLE, userProfile.getType())) {
+//        if (!StringUtils.equals(ConsoleUser.TYPE_CONSOLE, userProfile.getType())) {
             List<Menu> menus = userProfile.getMenus();
             if (menus != null) {
                 for (Menu m : menus) {
                     authorizationInfo.addStringPermission(m.getName());
                 }
             }
-        }
+//        }
         return authorizationInfo;
     }
 
@@ -85,7 +87,15 @@ public class MyShiroRealm extends AuthorizingRealm {
                 userProfile.setLoginAccount(consoleUser.getAccount());
                 userProfile.setUserName(consoleUser.getName());
                 userProfile.setType(ConsoleUser.TYPE_CONSOLE);
-                userProfile.setMenus(Lists.newArrayList());
+                List<Menu> menus = Lists.newArrayList();
+                Menu menu = new Menu();
+
+                menu.setAlias("运营配置管理");
+                menu.setId(UUID.randomUUID().toString());
+                menu.setName("/consoleConfigManage/index");
+
+                menus.add(menu);
+                userProfile.setMenus(menus);
                 return new SimpleAuthenticationInfo(userProfile, password.substring(16), ByteSource.Util.bytes(salt), getName());
             } else {
                 return null;
