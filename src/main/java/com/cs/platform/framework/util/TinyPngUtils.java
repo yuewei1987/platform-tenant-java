@@ -29,7 +29,6 @@ public class TinyPngUtils {
             logger.info(body);
             Map map = (Map) JsonMapper.nonDefaultMapper().fromJson(body, Map.class);
             map = (Map) map.get("output");
-            logger.info(map.get("url").toString());
 
             //下载文件
             file = new File(file.getPath());
