@@ -1,10 +1,8 @@
 package com.cs.platform.framework.rest;
 
 import com.cs.platform.framework.core.RestObject;
-import com.cs.platform.framework.util.PicUtils;
-import net.coobird.thumbnailator.Thumbnails;
+import com.cs.platform.framework.util.TinyPngUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,8 +39,11 @@ public class FileRestController {
             String fid = UUID.randomUUID().toString();
             f = new File(imgPath, fid + ".png");
             file.transferTo(f);
-            PicUtils.commpressPicForScale(f.getAbsolutePath(), f.getAbsolutePath(), 1000, 0.8, 1200, 1200); // 图片小于1000kb
-            logger.info(StringUtils.equals(contextPath, "/") ? "" : contextPath);
+
+            TinyPngUtils.shrink(f);
+
+//            PicUtils.commpressPicForScale(f.getAbsolutePath(), f.getAbsolutePath(), 1000, 0.8, 1200, 1200); // 图片小于1000kb
+//            logger.info(StringUtils.equals(contextPath, "/") ? "" : contextPath);
             return RestObject.newOk("", (StringUtils.equals(contextPath, "/") ? "" : contextPath) + "/open/file/view/" + fid);
         } catch (Exception e) {
             logger.error("", e);
